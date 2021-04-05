@@ -1,5 +1,5 @@
 asyncapi: '2.0.0'
-id: 'urn:io.delshahab.example.user-signedup'
+id: 'urn:io.BrandPepper.example.user-signedup'
 info:
   title: User signed-up API
   version: 0.1.1
@@ -37,7 +37,7 @@ channels:
               headers: |-
                 {"my-app-header": 23}
               payload: |-
-                {"id": "{{randomString(32)}}", "sendAt": "{{now()}}", "fullName": "Laurent Broudoux", "email": "laurent@delshahab.io", "age": 41}
+                {"id": "{{randomString(32)}}", "sendAt": "{{now()}}", "fullName": "Laurent Broudoux", "email": "laurent@BrandPepper.io", "age": 41}
           - john:
               summary: Example for John Doe user
               headers:
@@ -46,7 +46,7 @@ channels:
                 id: '{{randomString(32)}}'
                 sendAt: '{{now()}}'
                 fullName: John Doe
-                email: john@delshahab.io
+                email: john@BrandPepper.io
                 age: 36
 components:
   messageTraits:

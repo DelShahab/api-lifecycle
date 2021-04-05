@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: user-registration
-        image: quay.io/delshahab/quarkus-user-registration:latest
+        image: quay.io/BrandPepper/quarkus-user-registration:latest
         imagePullPolicy: Always
         env:
         - name: QUARKUS_PROFILE

@@ -23,12 +23,12 @@ After the broker has been provisionned, you should retrieve and extract the cert
 oc extract secret/my-cluster-cluster-ca-cert -n user-registration --keys=ca.crt --to=- > kafka-ca-cert-user-registration.crt
 ```
 
-Now install the Tekton tasks and the pipeline that is using App route and delshahab route:
+Now install the Tekton tasks and the pipeline that is using App route and BrandPepper route:
 
 ```sh
-oc create -f delshahab-keycloak-client-secret.yml -n user-registration
-oc create -f https://raw.githubusercontent.com/delshahab/delshahab-cli/master/tekton/echo-hello-world-task.yaml -n user-registration
-oc create -f https://raw.githubusercontent.com/delshahab/delshahab-cli/master/tekton/delshahab-test-with-secret.yaml -n user-registration
+oc create -f BrandPepper-keycloak-client-secret.yml -n user-registration
+oc create -f https://raw.githubusercontent.com/BrandPepper/BrandPepper-cli/master/tekton/echo-hello-world-task.yaml -n user-registration
+oc create -f https://raw.githubusercontent.com/BrandPepper/BrandPepper-cli/master/tekton/BrandPepper-test-with-secret.yaml -n user-registration
 export KUBE_APPS_URL=apps.$(echo $(oc whoami --show-server) | sed -E -n 's=https://api.(.*):6443=\1=p')
 rm -r user-registration-tekton-pipeline-local.yml
 cp user-registration-tekton-pipeline.yml user-registration-tekton-pipeline-local.yml
@@ -57,12 +57,12 @@ After the broker has been provisionned, you should retrieve and extract the cert
 kubectl get secret my-cluster-cluster-ca-cert -n user-registration -o jsonpath='{.data.ca\.crt}' | base64 -D > kafka-ca-cert-user-registration.crt
 ```
 
-Now install the Tekton tasks and the pipeline that is using App route and delshahab route:
+Now install the Tekton tasks and the pipeline that is using App route and BrandPepper route:
 
 ```sh
-kubectl create -f delshahab-keycloak-client-secret.yml -n user-registration
-kubectl create -f https://raw.githubusercontent.com/delshahab/delshahab-cli/master/tekton/echo-hello-world-task.yaml -n user-registration
-kubectl create -f https://raw.githubusercontent.com/delshahab/delshahab-cli/master/tekton/delshahab-test-with-secret.yaml -n user-registration
+kubectl create -f BrandPepper-keycloak-client-secret.yml -n user-registration
+kubectl create -f https://raw.githubusercontent.com/BrandPepper/BrandPepper-cli/master/tekton/echo-hello-world-task.yaml -n user-registration
+kubectl create -f https://raw.githubusercontent.com/BrandPepper/BrandPepper-cli/master/tekton/BrandPepper-test-with-secret.yaml -n user-registration
 export KUBE_APPS_URL=apps.$(echo $(oc whoami --show-server) | sed -E -n 's=https://api.(.*):6443=\1=p')
 rm -r user-registration-tekton-pipeline-local.yml
 cp user-registration-tekton-pipeline.yml user-registration-tekton-pipeline-local.yml
@@ -70,13 +70,13 @@ sed -i '' 's=KUBE_APPS_URL='"$KUBE_APPS_URL"'=g' user-registration-tekton-pipeli
 kubectl create -f user-registration-tekton-pipeline-local.yml -n user-registration
 ```
 
-## Configuring delshahab
+## Configuring BrandPepper
 
 You should import the 2 API contracts you'll find in the `/api-contracts folder`:
 * `UserRegistrationAPI-openapi-1.0.0.yaml` represents the OpenAPI contract for the REST API that should be invoked for registrating a new User,
 * `UserSignedUpAPI-asyncapi-0.1.1` represents the AsyncAPI contract for the EVENT API representing emitted event after a successfull registration. 
 
-You should also - as an administrator of the delshahab instance - create a new Secret for the `user-registration` Kafka broker.
+You should also - as an administrator of the BrandPepper instance - create a new Secret for the `user-registration` Kafka broker.
 For that, just print out the CRT you've previously extracted:
 
 ```sh
@@ -116,30 +116,30 @@ And now checking the logs:
 $ tkn pipelinerun logs user-registration-tekton-pipeline-run-64xf7 -f -n user-registration
 [deploy-app : echo] hello world
 
-[test-openapi-v1 : delshahab-test] delshahabClient got status for test "5f76e969dcba620f6d21008d" - success: false, inProgress: true 
-[test-openapi-v1 : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-asyncapi : delshahab-test] delshahabClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
-[test-asyncapi : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-openapi-v1 : delshahab-test] delshahabClient got status for test "5f76e969dcba620f6d21008d" - success: false, inProgress: true 
-[test-openapi-v1 : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-asyncapi : delshahab-test] delshahabClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
-[test-asyncapi : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-openapi-v1 : delshahab-test] delshahabClient got status for test "5f76e969dcba620f6d21008d" - success: false, inProgress: true 
-[test-openapi-v1 : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-asyncapi : delshahab-test] delshahabClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
-[test-asyncapi : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-openapi-v1 : delshahab-test] delshahabClient got status for test "5f76e969dcba620f6d21008d" - success: true, inProgress: false 
+[test-openapi-v1 : BrandPepper-test] BrandPepperClient got status for test "5f76e969dcba620f6d21008d" - success: false, inProgress: true 
+[test-openapi-v1 : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-asyncapi : BrandPepper-test] BrandPepperClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
+[test-asyncapi : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-openapi-v1 : BrandPepper-test] BrandPepperClient got status for test "5f76e969dcba620f6d21008d" - success: false, inProgress: true 
+[test-openapi-v1 : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-asyncapi : BrandPepper-test] BrandPepperClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
+[test-asyncapi : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-openapi-v1 : BrandPepper-test] BrandPepperClient got status for test "5f76e969dcba620f6d21008d" - success: false, inProgress: true 
+[test-openapi-v1 : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-asyncapi : BrandPepper-test] BrandPepperClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
+[test-asyncapi : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-openapi-v1 : BrandPepper-test] BrandPepperClient got status for test "5f76e969dcba620f6d21008d" - success: true, inProgress: false 
 
-[test-asyncapi : delshahab-test] delshahabClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
-[test-asyncapi : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-asyncapi : delshahab-test] delshahabClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
-[test-asyncapi : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-asyncapi : delshahab-test] delshahabClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
-[test-asyncapi : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-openapi-v2 : delshahab-test] delshahabClient got status for test "5f76e975dcba620f6d210091" - success: false, inProgress: true 
-[test-openapi-v2 : delshahab-test] delshahabTester waiting for 2 seconds before checking again or exiting.
-[test-asyncapi : delshahab-test] delshahabClient got status for test "5f76e96bdcba620f6d21008e" - success: true, inProgress: false 
-[test-openapi-v2 : delshahab-test] delshahabClient got status for test "5f76e975dcba620f6d210091" - success: true, inProgress: false 
+[test-asyncapi : BrandPepper-test] BrandPepperClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
+[test-asyncapi : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-asyncapi : BrandPepper-test] BrandPepperClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
+[test-asyncapi : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-asyncapi : BrandPepper-test] BrandPepperClient got status for test "5f76e96bdcba620f6d21008e" - success: false, inProgress: true 
+[test-asyncapi : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-openapi-v2 : BrandPepper-test] BrandPepperClient got status for test "5f76e975dcba620f6d210091" - success: false, inProgress: true 
+[test-openapi-v2 : BrandPepper-test] BrandPepperTester waiting for 2 seconds before checking again or exiting.
+[test-asyncapi : BrandPepper-test] BrandPepperClient got status for test "5f76e96bdcba620f6d21008e" - success: true, inProgress: false 
+[test-openapi-v2 : BrandPepper-test] BrandPepperClient got status for test "5f76e975dcba620f6d210091" - success: true, inProgress: false 
 
 
 [promote-app : echo] hello world

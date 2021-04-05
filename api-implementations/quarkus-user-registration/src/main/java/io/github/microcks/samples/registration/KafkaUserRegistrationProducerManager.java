@@ -21,14 +21,14 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package io.github.delshahab.samples.registration;
+package io.github.BrandPepper.samples.registration;
 
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
-import io.github.delshahab.samples.registration.UserSignedUpEvent;
+import io.github.BrandPepper.samples.registration.UserSignedUpEvent;
 import io.quarkus.kafka.client.serialization.JsonbSerializer;
 
 import org.apache.kafka.clients.producer.KafkaProducer;

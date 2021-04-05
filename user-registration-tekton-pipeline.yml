@@ -9,7 +9,7 @@ spec:
         name: echo-hello-world
     - name: test-asyncapi
       taskRef:
-        name: delshahab-test
+        name: BrandPepper-test
       runAfter:
         - deploy-app
       params:
@@ -19,15 +19,15 @@ spec:
           value: kafka://my-cluster-kafka-bootstrap-user-registration.KUBE_APPS_URL:443/user-signed-up
         - name: runner
           value: ASYNC_API_SCHEMA
-        - name: delshahabURL
-          value: https://delshahab-delshahab.KUBE_APPS_URL/api/
+        - name: BrandPepperURL
+          value: https://BrandPepper-BrandPepper.KUBE_APPS_URL/api/
         - name: waitFor
           value: 20sec
         - name: secretName
           value: user-registration-broker
     - name: test-openapi-v1
       taskRef:
-        name: delshahab-test
+        name: BrandPepper-test
       runAfter:
         - deploy-app
       params:
@@ -37,13 +37,13 @@ spec:
           value: http://user-registration-user-registration.KUBE_APPS_URL
         - name: runner
           value: OPEN_API_SCHEMA
-        - name: delshahabURL
-          value: https://delshahab-delshahab.KUBE_APPS_URL/api/
+        - name: BrandPepperURL
+          value: https://BrandPepper-BrandPepper.KUBE_APPS_URL/api/
         - name: waitFor
           value: 8sec
     - name: test-openapi-v2
       taskRef:
-        name: delshahab-test
+        name: BrandPepper-test
       runAfter:
         - test-openapi-v1
       params:
@@ -53,8 +53,8 @@ spec:
           value: http://user-registration-user-registration.KUBE_APPS_URL
         - name: runner
           value: OPEN_API_SCHEMA
-        - name: delshahabURL
-          value: https://delshahab-delshahab.KUBE_APPS_URL/api/
+        - name: BrandPepperURL
+          value: https://BrandPepper-BrandPepper.KUBE_APPS_URL/api/
         - name: waitFor
           value: 8sec
     - name: promote-app

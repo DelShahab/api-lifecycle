@@ -1,0 +1,65 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: user-registration-tekton-pipeline
+spec:
+  tasks:
+    - name: deploy-app
+      taskRef:
+        name: echo-hello-world
+    - name: test-asyncapi
+      taskRef:
+        name: delshahab-test
+      runAfter:
+        - deploy-app
+      params:
+        - name: apiNameAndVersion
+          value: "User signed-up API:0.1.1"
+        - name: testEndpoint
+          value: kafka://my-cluster-kafka-bootstrap-user-registration.KUBE_APPS_URL:443/user-signed-up
+        - name: runner
+          value: ASYNC_API_SCHEMA
+        - name: delshahabURL
+          value: https://delshahab-delshahab.KUBE_APPS_URL/api/
+        - name: waitFor
+          value: 20sec
+        - name: secretName
+          value: user-registration-broker
+    - name: test-openapi-v1
+      taskRef:
+        name: delshahab-test
+      runAfter:
+        - deploy-app
+      params:
+        - name: apiNameAndVersion
+          value: "User registration API:1.0.0"
+        - name: testEndpoint
+          value: http://user-registration-user-registration.KUBE_APPS_URL
+        - name: runner
+          value: OPEN_API_SCHEMA
+        - name: delshahabURL
+          value: https://delshahab-delshahab.KUBE_APPS_URL/api/
+        - name: waitFor
+          value: 8sec
+    - name: test-openapi-v2
+      taskRef:
+        name: delshahab-test
+      runAfter:
+        - test-openapi-v1
+      params:
+        - name: apiNameAndVersion
+          value: "User registration API:1.0.0"
+        - name: testEndpoint
+          value: http://user-registration-user-registration.KUBE_APPS_URL
+        - name: runner
+          value: OPEN_API_SCHEMA
+        - name: delshahabURL
+          value: https://delshahab-delshahab.KUBE_APPS_URL/api/
+        - name: waitFor
+          value: 8sec
+    - name: promote-app
+      taskRef:
+        name: echo-hello-world
+      runAfter:
+        - test-asyncapi
+        - test-openapi-v2
